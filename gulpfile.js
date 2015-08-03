@@ -18,7 +18,7 @@ gulp.task('clean', function(cb){
 
 // add custom browserify options here
 var customOpts = {
-  entries: ['./src/index.js'],
+  entries: ['./web/src/index.js'],
   debug: true
 };
 var opts = assign({}, watchify.args, customOpts);
@@ -40,7 +40,7 @@ function bundle() {
     .pipe(source('bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(uglify())
+    //.pipe(uglify())
     .pipe(sourcemaps.write('./')) // writes .map file
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./web/dist'));
 }

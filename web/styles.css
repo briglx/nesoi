@@ -18,6 +18,18 @@ p {
     border: none;
     background-color: rgba(0,255,0,0.33);
 }
+p.left {
+    border-left: 5px solid rgba(0,255,0,0.75);
+}
+p.bottom {
+    border-bottom: 5px solid rgba(0,255,0,0.75);
+}
+p.right {
+    border-right: 5px solid rgba(0,255,0,0.75);
+}
+p.top {
+    border-top: 5px solid rgba(0,255,0,0.75);
+}
 
 .grass {
     background-color: rgba(17, 172, 0, 1);
@@ -27,6 +39,10 @@ p {
     background-color: rgba(233, 180, 78, 1);
 }
 
-.hill {
-    background-color: rgba(222, 226, 4, 1);
+.water {
+    background-color: rgba(112, 112, 201, 1);
+}
+
+.quicksand {
+    background-color: rgba(183, 135, 20, 1);
 }

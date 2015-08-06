@@ -8,6 +8,7 @@
     width: 64px;
     font-size:9px;
     text-align:center;
+    color: rgba(0,0,0,0);
 }
 
 .content div {
@@ -36,15 +37,19 @@ p.top {
 }
 
 .grass {
+    background-image: url("img/grass.png");
     background-color: rgba(17, 172, 0, 1);
 }
 
 .sand {
+    background-image: url("img/sand.png");
     background-color: rgba(233, 180, 78, 1);
 }
 
 .water {
+    background-image: url("img/water.png");
     background-color: rgba(112, 112, 201, 1);
+
 }
 
 .quicksand {

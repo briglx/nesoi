@@ -3,7 +3,7 @@
 }
 .content div, p {
     box-sizing: border-box;
-    border: 1px solid rgba(102, 102, 102, 0.1);
+    sborder: 1px solid rgba(102, 102, 102, 0.1);
     height: 64px;
     width: 64px;
     font-size:9px;
@@ -34,6 +34,43 @@ p.right {
 }
 p.top {
     border-top: 5px solid rgba(0,255,0,0.75);
+}
+
+
+
+.mountainGreenTop {
+    background-image: url("img/mountainGreenTop.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.mountainGreenTopRight {
+    background-image: url("img/mountainGreenTopRight.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+
+.mountainGreen {
+    background-image: url("img/mountainGreen.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+
+.mountainGreenLowerRight {
+    background-image: url("img/mountainGreenLowerRight.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+
+.mountainGreenLowerLeft {
+    background-image: url("img/mountainGreenLowerLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+
+
+.cave {
+    background-image: url("img/cave.png");
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.dirt {
+    background-image: url("img/dirt.png");
+    background-color: rgba(254, 179, 103, 1);
 }
 
 .grass {

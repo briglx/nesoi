@@ -29,8 +29,6 @@
 
     var bounds = defaultBounds;
 
-    
-
     var Direction = {
         top: 12,
         right: 3,
@@ -40,7 +38,6 @@
 
     // Elements
     var personEl = document.querySelector("p");
-
     
     // Objects
     function World(){};
@@ -57,13 +54,11 @@
             } else {
 
                 var target = {x: this.x, y:this.y-1};
+                var targetCell = getCell(target);
 
-                if(inBoundary(target) && inWorld(target)){
+                if(inBoundary(target) && inWorld(target)){                    
 
-                    // check if the target is traversable
-                    var targetCell = getCell(target);
-
-                    if(targetCell.traversable){
+                    if(targetCell && targetCell.traversable){
                         if(targetCell.terrain == "quicksand"){
                             alert("You Died");
                             resetGame(this);
@@ -75,7 +70,7 @@
                     }                
                 } 
                 else {
-                    if(inWorld(target)){
+                    if(inWorld(target) && targetCell && targetCell.traversable){
                         bounds = getBounds(target);
                         this.y = bounds.max.y;  
 
@@ -91,8 +86,10 @@
             } else {
 
                 var target = {x: this.x, y:this.y+1};
+                var targetCell = getCell(target);
+
                 if(inBoundary(target) && inWorld(target)){                
-                    var targetCell = getCell(target);
+                    
                     if(targetCell.traversable){
                         if(targetCell.terrain == "quicksand"){
                             alert("You Died");
@@ -105,7 +102,7 @@
                     }
                 }  
                 else {
-                    if(inWorld(target)){
+                    if(inWorld(target) && targetCell && targetCell.traversable){
                         bounds = getBounds(target);
                         this.y = bounds.min.y; 
                         world.trigger("changeBounds", bounds);    
@@ -120,9 +117,10 @@
             } else {
 
                 var target = {x: this.x-1, y:this.y};
-                
+                var targetCell = getCell(target);
+
                 if(inBoundary(target) && inWorld(target)){                
-                    var targetCell = getCell(target);
+                    
                     if(targetCell.traversable){
                         if(targetCell.terrain == "quicksand"){
                             alert("You Died");
@@ -135,7 +133,7 @@
                     }
                 } else {
 
-                    if(inWorld(target)){
+                    if(inWorld(target) && targetCell && targetCell.traversable){
                         bounds = getBounds(target);
                         this.x = bounds.max.x;
                         world.trigger("changeBounds", bounds);     
@@ -144,14 +142,17 @@
             }
         };
         this.moveRight = function(){
+            console.log("debug");
 
             if(this.facing != Direction.right){
                 this.facing = Direction.right;
             } else {
 
                 var target = {x: this.x+1, y:this.y};
+                var targetCell = getCell(target);
+
                 if(inBoundary(target) && inWorld(target)){                
-                    var targetCell = getCell(target);
+                    
                     if(targetCell.traversable){
                         if(targetCell.terrain == "quicksand"){
                             alert("You Died");
@@ -164,7 +165,7 @@
                     }
                 } else {
                     // Load new boundary
-                    if(inWorld(target)){
+                    if(inWorld(target) && targetCell && targetCell.traversable){
                         bounds = getBounds(target);
                         this.x = bounds.min.x;
                         world.trigger("changeBounds", bounds); 
@@ -197,16 +198,22 @@
     _.extend(world, Backbone.Events);
     world.on("changeBounds", function(bounds){
         
+        drawMap(bounds);
+        updateMap(cells, bounds);    
+        drawPerson(jim); 
+
         $.get(getUrl(bounds.min))
         .done(function(data){
+            
+            var cs = data.terrain;
 
-            cells = data.terrain;
-
-            if(cells){
-                drawMap(bounds);
-                updateMap(cells, bounds);    
-                drawPerson(jim);    
-            } 
+            // reset
+            if(cs){
+                cells = [];
+                cells = cells.concat(cs);               
+            }
+            getPrecachedCells(bounds);
+            
         });
         
 
@@ -265,6 +272,8 @@
             updateMap(cells, bounds);    
             drawPerson(jim);    
         }
+
+        getPrecachedCells(defaultBounds);
         
     })
     .fail(function(xHr, textStatus, e){
@@ -276,7 +285,48 @@
         return "http://localhost:8080/api/terrain?p=" + point.x + "," + point.y;
     }
     
-
+    function getPrecachedCells(bounds){
+        var topBounds = {
+            min: {x: bounds.min.x, y: bounds.min.y - defaultBounds.getHeight()},
+            max: {x: bounds.max.x, y: bounds.max.y - defaultBounds.getHeight()}
+        }
+        $.get(getUrl(topBounds.min), function(data){
+            var cs = data.terrain;
+            if(cs){
+                cells = cells.concat(cs);
+            }
+        })
+        var rightBounds = {
+            min: {x: bounds.min.x + defaultBounds.getWidth(), y: bounds.min.y},
+            max: {x: bounds.max.x + defaultBounds.getWidth(), y: bounds.max.y}
+        }
+        $.get(getUrl(rightBounds.min), function(data){
+            var cs = data.terrain;
+            if(cs){
+                cells = cells.concat(cs);
+            }
+        })
+        var bottomBounds = {
+            min: {x: bounds.min.x, y: bounds.min.y + defaultBounds.getHeight()},
+            max: {x: bounds.max.x, y: bounds.max.y + defaultBounds.getHeight()}
+        }
+        $.get(getUrl(bottomBounds.min), function(data){
+            var cs = data.terrain;
+            if(cs){
+                cells = cells.concat(cs);
+            }
+        })
+        var leftBounds = {
+            min: {x: bounds.min.x - defaultBounds.getWidth(), y: bounds.min.y},
+            max: {x: bounds.max.x - defaultBounds.getWidth(), y: bounds.max.y}
+        }
+        $.get(getUrl(leftBounds.min), function(data){
+            var cs = data.terrain;
+            if(cs){
+                cells = cells.concat(cs);
+            }
+        })
+    }
     
     function resetGame(person){
         bounds = defaultBounds;

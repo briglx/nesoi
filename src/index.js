@@ -1,8 +1,134 @@
 var http = require('http');
+var express = require('express');
+var app = express(); 
+var bodyParser = require('body-parser');
+var db = require('./db')
+var assert = require('assert');
+var extend = require('util')._extend;
 
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
-}).listen(1337, '127.0.0.1');
+// Defaults
+var defaultBounds = {
+    min: {x: 0, y:0},
+    max: {x: 15, y:9},
+    getWidth: function(){return this.max.x - this.min.x + 1},
+    getHeight: function(){return this.max.y - this.min.y + 1}
+};
+var url = 'mongodb://localhost:27017/nesoi';
+var port = process.env.PORT || 8080; 
 
-console.log('Server running at http://127.0.0.1:1337/');
+// App
+var router = express.Router();
+
+
+
+router.get('/terrain/:terrainType?', function(req, res) {
+    res.setHeader('Last-Modified', (new Date()).toUTCString());
+
+    var collection = db.get().collection('terrain')
+    
+    var query = {};
+
+    if(req.params.terrainType){
+        query = extend(query, {terrain: req.params.terrainType})  
+    } 
+
+    if(req.query.x){
+        var x = parseInt(req.query.x);
+        query = extend(query, {x: x})  
+    } 
+
+    // Look for boundary point
+    if(req.query.p){
+        var ps = req.query.p.split(",");
+
+        var x = parseInt(ps[0], 10);
+        var y = parseInt(ps[1], 10);  
+       
+        if(isNumeric(x) && isNumeric(y)){
+            var minPoint = new Point(x, y);
+            var maxPoint = new Point(minPoint.x + defaultBounds.getWidth(), minPoint.y + defaultBounds.getHeight());
+
+            query = { $and: [ 
+                {x: { $gte: minPoint.x }},  
+                {x: { $lt: maxPoint.x }},
+                {y: { $gte: minPoint.y }},  
+                {y: { $lt: maxPoint.y }}
+                ]
+            };
+        }
+        else {
+            // missing parameter
+            res.status(400).send({ error: 'missing parameters for point. Ensure point is in the pattern p=3,5' });
+        }
+    }
+
+    console.log(query);
+
+    collection.find(query).toArray(function(err, docs) {
+        res.json({terrain: docs})
+    })    
+    
+});
+
+router.post('/terrain/', function(req, res) {
+    
+    var collection = db.get().collection('terrain')
+    
+    var newTerrain = {x: 100, y: 100, terrain: "brig", traversable: "false"};
+
+    collection.insert(newTerrain, function(err, result) {
+        assert.equal(err, null);
+        assert.equal(1, result.result.n);
+        assert.equal(1, result.ops.length);
+        res.json({ message: 'Inserted 1 documents into the document collection' });   
+    });  
+    
+    
+});
+
+
+// Configure and start app
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+app.use('/api', router);
+
+
+db.connect('mongodb://localhost:27017/nesoi', function(err) {
+  if (err) {
+    console.log('Unable to connect to Mongo.')
+    process.exit(1)
+  } else {
+    app.listen(port, function() {
+      console.log('Server running at http://127.0.0.1:' + port)
+    })
+  }
+})
+
+
+function Point(x, y){
+    this.x = x,
+    this.y = y
+}
+
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}

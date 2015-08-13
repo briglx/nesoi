@@ -36,7 +36,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2015-08-06 22:08:40 +0000</string>
+	<string>2015-08-11 17:58:43 +0000</string>
 	<key>Modifier</key>
 	<string>Brig Lamoreaux</string>
 	<key>NotesVisible</key>
@@ -3940,7 +3940,7 @@
 					<key>Print</key>
 					<string>YES</string>
 					<key>View</key>
-					<string>YES</string>
+					<string>NO</string>
 				</dict>
 				<dict>
 					<key>Lock</key>
@@ -3950,7 +3950,7 @@
 					<key>Print</key>
 					<string>YES</string>
 					<key>View</key>
-					<string>NO</string>
+					<string>YES</string>
 				</dict>
 				<dict>
 					<key>Lock</key>
@@ -5987,7 +5987,7 @@
 					<key>Print</key>
 					<string>YES</string>
 					<key>View</key>
-					<string>NO</string>
+					<string>YES</string>
 				</dict>
 				<dict>
 					<key>Lock</key>
@@ -17425,7 +17425,7 @@
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
-		<integer>6</integer>
+		<integer>3</integer>
 		<key>ExpandedCanvases</key>
 		<array>
 			<dict>
@@ -17466,9 +17466,9 @@
 		<key>SidebarWidth</key>
 		<integer>118</integer>
 		<key>VisibleRegion</key>
-		<string>{{-28.533621, -10.652169}, {145.55336, 144.2688}}</string>
+		<string>{{-2.4929883, -14.999993}, {102.64625, 101.67132}}</string>
 		<key>Zoom</key>
-		<real>5.059999942779541</real>
+		<real>7.179999828338623</real>
 		<key>ZoomValues</key>
 		<array>
 			<array>
@@ -17508,8 +17508,8 @@
 			</array>
 			<array>
 				<string>Green Mountain</string>
-				<real>6</real>
-				<real>5.8400001525878906</real>
+				<real>6.679999828338623</real>
+				<real>7.0300002098083496</real>
 			</array>
 			<array>
 				<string>Green Mountain Top</string>

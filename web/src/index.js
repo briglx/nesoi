@@ -14,11 +14,11 @@
 
     var worldBounds = {
         min: {x: 0, y:0},
-        max: {x: 40, y:19}
+        max: {x: 40, y:20}
     };
     var defaultBounds = {
         min: {x: 0, y:0},
-        max: {x: 15, y:9},
+        max: {x: 15, y:10},
         getWidth: function(){return this.max.x - this.min.x + 1},
         getHeight: function(){return this.max.y - this.min.y + 1}
     };
@@ -257,6 +257,43 @@
         
     });
 
+    var selectedTerrain;
+    $(".pallet div").on("click", function(e){
+        $(".pallet div").removeClass("selected");
+
+        if(selectedTerrain != $(this).attr("class").replace("selected", "").trim()){
+            
+            $(this).toggleClass("selected");
+            selectedTerrain = $(this).attr("class").replace("selected", "").trim();
+
+            $('.chk').prop('checked', isTerrainTraversable(selectedTerrain));
+        } else {
+            selectedTerrain = "";
+        }
+        
+        
+    });
+
+    $(".content").on("click", "div", function(e){
+        if(selectedTerrain){
+
+            $(this).removeClass($(this).attr("class"));
+            $(this).addClass(selectedTerrain);
+
+            var updatePoint = indexToCoord($(this).index()+1, bounds);
+            var updateCell = getCell(updatePoint);
+
+            if(updateCell){
+                updateCell.terrain = selectedTerrain;
+                updateCell.traversable = $('.chk').prop('checked')==true;
+            }
+            // Save to DB
+            $.post("http://localhost:8080/api/terrain/", updateCell)    
+            
+
+        }
+    });
+
    
     var cells = [];
 
@@ -413,6 +450,37 @@
 
     }
 
+    function isTerrainTraversable(terrain){
+
+        var isTraversable = false;
+
+        if(terrain == "mountainGreenTop"){
+
+        } else if(terrain == "mountainGreenTopRight"){
+
+        } else if(terrain == "mountainGreen"){
+
+        } else if(terrain == "mountainGreenLowerRight"){
+
+        } else if(terrain == "mountainGreenLowerLeft"){
+
+        } else if(terrain == "cave"){
+            isTraversable = true;
+        } else if(terrain == "dirt"){
+            isTraversable = true;
+        } else if(terrain == "grass"){
+            isTraversable = true;
+        } else if(terrain == "sand"){
+            isTraversable = true;
+        } else if(terrain == "water"){
+
+        } else if(terrain == "quicksand"){
+            isTraversable = true;
+        }
+
+        return isTraversable;
+    }
+
     function inBoundary(target){
 
         if(target.x < bounds.min.x){
@@ -464,6 +532,18 @@
         return idx
     }
 
+    function indexToCoord(idx, bounds){
+
+        var point = {x:0, y:0};
+        
+        var y = bounds.min.y + Math.floor((idx -1) / bounds.getWidth());
+        
+        point.x = bounds.min.x + (idx - 1) - bounds.getWidth() * y;
+        point.y = y;
+
+        return point
+    }
+
     function getBounds(cell){
         // Load the bounds this cell is in
 
@@ -472,10 +552,10 @@
         var maxX = minX + defaultBounds.getWidth() -1;
         var maxY = minY + defaultBounds.getHeight() -1;
 
-        var bounds = {
-            min: {x: minX, y:minY},
-            max: {x: maxX, y: maxY}
-        };
+        bounds.min.x = minX;
+        bounds.min.y = minY;
+        bounds.max.x = maxX;
+        bounds.max.y = maxY;
 
         return bounds;
     }

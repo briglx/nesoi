@@ -9,7 +9,7 @@ var extend = require('util')._extend;
 // Defaults
 var defaultBounds = {
     min: {x: 0, y:0},
-    max: {x: 15, y:9},
+    max: {x: 15, y:10},
     getWidth: function(){return this.max.x - this.min.x + 1},
     getHeight: function(){return this.max.y - this.min.y + 1}
 };
@@ -73,16 +73,48 @@ router.get('/terrain/:terrainType?', function(req, res) {
 router.post('/terrain/', function(req, res) {
     
     var collection = db.get().collection('terrain')
-    
-    var newTerrain = {x: 100, y: 100, terrain: "brig", traversable: "false"};
 
-    collection.insert(newTerrain, function(err, result) {
-        assert.equal(err, null);
-        assert.equal(1, result.result.n);
-        assert.equal(1, result.ops.length);
-        res.json({ message: 'Inserted 1 documents into the document collection' });   
-    });  
+    var terrain = req.body;
     
+    // validate parameters
+    if(terrain && terrain.x && terrain.y && terrain.terrain && terrain.traversable)
+    {
+        if(isNumeric(terrain.x) && isNumeric(terrain.y)){
+            terrain.x = parseInt(terrain.x);
+            terrain.y = parseInt(terrain.y);
+            
+            terrain.traversable = terrain.traversable == 'true';
+            console.log(terrain);
+
+            if(terrain._id) {
+                delete(terrain["_id"]);
+                console.log("Updateding");
+                collection.update({x: terrain.x, y:terrain.y},terrain, function(err, result) {
+                    assert.equal(err, null);
+                    console.log("Updated");
+                    res.json({ message: 'Inserted 1 documents into the document collection', terrain: terrain });   
+                }); 
+
+            } else {
+                console.log("Inserting");
+                collection.insert(terrain, function(err, result) {
+                    assert.equal(err, null);
+                    assert.equal(1, result.result.n);
+                    assert.equal(1, result.ops.length);
+                    console.log("Inserted");
+                    res.json({ message: 'Inserted 1 documents into the document collection', terrain: terrain });   
+                }); 
+            }
+            
+        } else {
+            res.status(400).send({ error: 'invalid parameters for terrain. Ensure terrain x, y are numeric.' });
+        }
+
+    } else {       
+       res.status(400).send({ error: 'missing parameters for terrain. Ensure terrain has x, y, terrain, and traversable.' });
+    }
+    
+    // var newTerrain = {x: 100, y: 100, terrain: "brig", traversable: "false"};
     
 });
 

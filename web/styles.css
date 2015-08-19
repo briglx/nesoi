@@ -1,25 +1,30 @@
 .content {
     width: 1280px;
+
+}
+aside {
+    position: absolute;
+    right: 0px;  
+    width: 162px;  
 }
 .pallet, .cmd, .map  {
-    position: absolute;
-    right: 0px;    
-    spadding: 10px;
     background-color: rgba(0,0,0,0.1);
-    width: 162px;
 }
 .map {
-    margin-top:30px;
-    min-height: 100px;
+    
 }
 .cmd input {
     width:100%;
 }
 .pallet{
-    margin-top:140px;
+    
 }
 .pallet .tab * + * {
     smargin: 10px 0px;
+}
+
+.map svg {
+    
 }
 
 .content div, .pallet .icons div, p {

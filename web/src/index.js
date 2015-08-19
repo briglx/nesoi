@@ -7,6 +7,8 @@
     var _ = require('underscore');
     Backbone.$ = $;
 
+    var apiBaseUrl = "http://localhost:8080/api/";
+    var cells = [];
     var cellBounds = {
         min: {x: 0, y:0},
         max: {x: 63, y:63}
@@ -22,6 +24,13 @@
         getWidth: function(){return this.max.x - this.min.x + 1},
         getHeight: function(){return this.max.y - this.min.y + 1}
     };
+    var miniMapBounds = {
+        scale: 2,
+        min: {x: 0, y:0},
+        max: {x: 0, y:0},
+        getWidth: function(){return this.max.x - this.min.x + 1},
+        getHeight: function(){return this.max.y - this.min.y + 1}
+    }
     var startingPoint = {
         x: 7,
         y: 5
@@ -68,6 +77,17 @@
 
         };
 
+        this.moveToTarget = function(target){
+            
+            //var targetCell = getCell(target);
+            bounds = getBounds(target);
+
+            this.x = target.x;       
+            this.y = target.y;       
+
+            world.trigger("changeBounds", {bounds:bounds, refresh:true}); 
+               
+        };
 
         this.move = function(direction, delX, delY){
 
@@ -110,63 +130,96 @@
                             this.y = bounds.max.y;
                         }
 
-                        world.trigger("changeBounds", bounds); 
-                    }
-                                     
+                        world.trigger("changeBounds", {bounds:bounds, refresh:false}); 
+                    }                 
                 }
             }
         }
     }
 
 
+    var jim = new Person();
+    var world = new World();
+    function ready(){
+
+        createPlayer();
+        createWorld();
+
+        drawMap(bounds);
+        drawMiniMap();
+
+        $.get(getUrl(defaultBounds.min))
+        .done(function(data){
+           
+            cells = data.terrain;
+
+            if(cells){
+                updateMap(cells, bounds);    
+                drawPerson(jim);    
+            }
+
+            getPrecachedCells(defaultBounds);
+            
+        })
+        .fail(function(xHr, textStatus, e){
+            console.log("Failed",e)
+        })
+
+    }
 
     
-    var jim = new Person();
-    _.extend(jim, Backbone.Events);
-    jim.on("moveUp", function(e) {
-        this.moveUp(); 
-        drawPerson(this);       
-    });
-    jim.on("moveDown", function(e) {
-        this.moveDown();        
-        drawPerson(this);
-    });
-    jim.on("moveLeft", function(e) {
-        this.moveLeft(); 
-        drawPerson(this);       
-    });
-    jim.on("moveRight", function(e) {
-        this.moveRight();
-        drawPerson(this);        
-    });
-
-    var world = new World();
-    _.extend(world, Backbone.Events);
-    world.on("changeBounds", function(bounds){
-
-        console.log("bounds")
-        
-        drawMap(bounds);
-        updateMap(cells, bounds);    
-        drawPerson(jim); 
-
-        $.get(getUrl(bounds.min))
-        .done(function(data){
-            
-            var cs = data.terrain;
-
-            // reset
-            if(cs){
-                cells = [];
-                cells = cells.concat(cs);               
-            }
-            getPrecachedCells(bounds);
-            
+    function createPlayer(){
+        _.extend(jim, Backbone.Events);
+        jim.on("moveUp", function(e) {
+            this.moveUp(); 
+            drawPerson(this);       
         });
-        
+        jim.on("moveDown", function(e) {
+            this.moveDown();        
+            drawPerson(this);
+        });
+        jim.on("moveLeft", function(e) {
+            this.moveLeft(); 
+            drawPerson(this);       
+        });
+        jim.on("moveRight", function(e) {
+            this.moveRight();
+            drawPerson(this);        
+        });
+    }
+    
+    function createWorld(){
+        _.extend(world, Backbone.Events);
+        world.on("changeBounds", function(e){
 
-    });
+            drawMap(e.bounds);
+            updateMap(cells, e.bounds);    
+            drawPerson(jim); 
 
+            $.get(getUrl(e.bounds.min))
+            .done(function(data){
+                
+                var cs = data.terrain;
+
+                // reset
+                if(cs){
+                    cells = [];
+                    cells = cells.concat(cs); 
+
+                    if(e.refresh){                        
+                        updateMap(cells, e.bounds);                                    
+                    }
+                    
+                }
+                getPrecachedCells(e.bounds);
+                
+            });
+            
+
+        });
+
+    }
+    
     // Bind Document Events
     $("body").on("keydown", function(e){
         var moved = false;
@@ -192,17 +245,19 @@
 
         } else {
             // nothing
-            //console.log(e.keyCode);
-        }
-
-        if(moved){
             
-            //drawMap(bounds);
-            //updateMap(cells, bounds);
-            //drawPerson(jim);    
-        }
+        }       
         
+    });
+
+    $(".map").on("click", function(e){
+                
+        var mapX = Math.floor((e.pageX - $(this).offset().left) / miniMapBounds.scale);
+        var mapY = Math.floor((e.pageY - $(this).offset().top) / miniMapBounds.scale);
         
+        var cell = convertOrigin({x:mapX, y:mapY}, {x:miniMapBounds.min.x, y:miniMapBounds.min.y}, {x:0, y:0})
+
+        jim.moveToTarget(cell, 0, 0);
     });
 
     $(".pallet .tab h1").on("click", function(e){
@@ -211,9 +266,6 @@
         $(".icons", tab).slideToggle("slow");
         $(tab).toggleClass("active");
 
-        // console.log('hi");');
-        // console.log($(this).parent(".tab").find(".icons").isHidden());
-        // $(this).parent(".tab").find(".icons").hide();
     });
 
     var selectedTerrain;
@@ -239,8 +291,6 @@
             $(this).removeClass($(this).attr("class"));
             $(this).addClass(selectedTerrain);
 
-            console.log("debug")
-
             var updatePoint = indexToCoord($(this).index()+1, bounds);
             var updateCell = getCell(updatePoint);
 
@@ -252,38 +302,15 @@
             updateCell.traversable = $('.chk').prop('checked')==true;
 
             // Save to DB
-            $.post("http://localhost:8080/api/terrain/", updateCell)    
+            $.post(apiBaseUrl + "terrain/", updateCell)    
             
 
         }
     });
 
-   
-    var cells = [];
-
-    // 
-    drawMap(bounds);
-
-    $.get(getUrl(defaultBounds.min))
-    .done(function(data){
-       
-        cells = data.terrain;
-
-        if(cells){
-            updateMap(cells, bounds);    
-            drawPerson(jim);    
-        }
-
-        getPrecachedCells(defaultBounds);
-        
-    })
-    .fail(function(xHr, textStatus, e){
-        console.log("Failed",e)
-    })
-
 
     function getUrl(point){
-        return "http://localhost:8080/api/terrain?p=" + point.x + "," + point.y;
+        return apiBaseUrl + "terrain?p=" + point.x + "," + point.y;
     }
     
     function getPrecachedCells(bounds){
@@ -333,6 +360,78 @@
         bounds = defaultBounds;
         person.x = startingPoint.x;
         person.y = startingPoint.y;
+    }
+
+    function drawMiniMap(){
+
+        // var minX = 0;
+        // var maxX = 0;
+        // var minY = 0;
+        // var maxY = 0;
+        // var mapWidth = 0;
+        // var mapHeight = 0;
+
+        $.get(apiBaseUrl + "terrain", function(data){
+            var cs = data.terrain;
+
+            var c = {};
+            for(var i=0;i<cs.length;i++){
+                c = cs[i];
+
+                if(c.x < miniMapBounds.min.x){
+                    miniMapBounds.min.x = c.x;
+                }
+                if(c.x > miniMapBounds.max.x){
+                    miniMapBounds.max.x = c.x
+                }
+                if(c.y < miniMapBounds.min.y){
+                    miniMapBounds.min.y = c.y;
+                }
+                if(c.y > miniMapBounds.max.y){
+                    miniMapBounds.max.y = c.y
+                }
+            }
+ 
+            var svgStr = '<svg>'
+            var color = "black";
+            for(var i=0;i<cs.length;i++){
+                c = cs[i];
+               
+                svgStr = svgStr + '<rect x="' + (c.x - miniMapBounds.min.x) * miniMapBounds.scale + '" y="' + (c.y - miniMapBounds.min.y)*miniMapBounds.scale + '" width="' + miniMapBounds.scale  + '" height="' + miniMapBounds.scale + '" fill="' + getDefaultColor(c.terrain) + '" />"' 
+            }
+            svgStr = svgStr + '</svg>'
+            
+            $(".map").append($(svgStr));
+            var svg = $(".map svg");
+            
+            svg.attr("width", miniMapBounds.getWidth()*miniMapBounds.scale);
+            svg.attr("height", miniMapBounds.getHeight()*miniMapBounds.scale);
+            
+        });
+
+    }
+
+    function getDefaultColor(terrain){
+        var defaultColor = "black";
+
+        if(terrain.toLowerCase().indexOf("water") >= 0){
+            defaultColor = "#0000FF";
+        }
+        else if(terrain.toLowerCase().indexOf("green") >= 0){
+            defaultColor = "#138E01";
+        } else if(terrain.toLowerCase().indexOf("red") >= 0){
+            defaultColor = "#B02503";
+        } else if(terrain.toLowerCase().indexOf("sand") >= 0){
+            defaultColor = "#FEB367";
+        } else if(terrain.toLowerCase().indexOf("water") >= 0){
+            defaultColor = "#0000FF";
+        } else if(terrain.toLowerCase().indexOf("dirt") >= 0){
+            defaultColor = "#FEB367";
+        } else {
+            defaultColor = "black";
+        }
+        
+        return defaultColor;
     }
     
     function drawMap(bounds){
@@ -417,7 +516,7 @@
     function isTerrainTraversable(terrain){
 
         var isTraversable = false;
-console.log(terrain);
+
         if(terrain == "cave"){
             isTraversable = true;
         } else if(terrain == "dirt"){
@@ -481,6 +580,17 @@ console.log(terrain);
 
         return true;
 
+    }
+
+    function convertOrigin(point, oldOrigin, newOrigin){
+        // origin is based on X,Y of DB cell coordinates. IE (0,0) is the first map
+
+        var newPoint = {x:0, y:0};
+
+        newPoint.x = (oldOrigin.x + point.x) ;
+        newPoint.y = (oldOrigin.y + point.y) ;
+
+        return newPoint;
     }
 
     function coordToIndex(x, y){
@@ -553,5 +663,7 @@ console.log(terrain);
         return undefined;
       };
     }
+
+    ready();
 
 })();

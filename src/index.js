@@ -37,6 +37,11 @@ router.get('/terrain/:terrainType?', function(req, res) {
         query = extend(query, {x: x})  
     } 
 
+    if(req.query.y){
+        var y = parseInt(req.query.y);
+        query = extend(query, {y: y})  
+    } 
+
     // Look for boundary point
     if(req.query.p){
         var ps = req.query.p.split(",");
@@ -62,8 +67,6 @@ router.get('/terrain/:terrainType?', function(req, res) {
         }
     }
 
-    console.log(query);
-
     collection.find(query).toArray(function(err, docs) {
         res.json({terrain: docs})
     })    
@@ -75,6 +78,8 @@ router.post('/terrain/', function(req, res) {
     var collection = db.get().collection('terrain')
 
     var terrain = req.body;
+
+    console.log(terrain);
     
     // validate parameters
     if(terrain && terrain.x && terrain.y && terrain.terrain && terrain.traversable)
@@ -84,7 +89,6 @@ router.post('/terrain/', function(req, res) {
             terrain.y = parseInt(terrain.y);
             
             terrain.traversable = terrain.traversable == 'true';
-            console.log(terrain);
 
             if(terrain._id) {
                 delete(terrain["_id"]);
@@ -92,18 +96,29 @@ router.post('/terrain/', function(req, res) {
                 collection.update({x: terrain.x, y:terrain.y},terrain, function(err, result) {
                     assert.equal(err, null);
                     console.log("Updated");
-                    res.json({ message: 'Inserted 1 documents into the document collection', terrain: terrain });   
+                    res.json({ message: 'Updated 1 documents in the document collection', terrain: terrain });   
                 }); 
 
             } else {
                 console.log("Inserting");
-                collection.insert(terrain, function(err, result) {
-                    assert.equal(err, null);
-                    assert.equal(1, result.result.n);
-                    assert.equal(1, result.ops.length);
-                    console.log("Inserted");
-                    res.json({ message: 'Inserted 1 documents into the document collection', terrain: terrain });   
-                }); 
+
+                // Check if terrain already exists
+                collection.find({x: terrain.x, y: terrain.y}).toArray(function(err, docs) {
+                    console.log(docs);
+                    if(docs && docs.length > 0){
+                        console.log("Inserting new record when one already exists")    
+                        res.status(409).send({ error: "Inserting new record when one already exists", terrain:terrain });
+                    }
+                    else {
+                        collection.insert(terrain, function(err, result) {
+                            assert.equal(err, null);
+                            assert.equal(1, result.result.n);
+                            assert.equal(1, result.ops.length);
+                            console.log("Inserted");
+                            res.json({ message: 'Inserted 1 documents into the document collection', terrain: terrain });   
+                        }); 
+                    }
+                });
             }
             
         } else {
@@ -113,8 +128,6 @@ router.post('/terrain/', function(req, res) {
     } else {       
        res.status(400).send({ error: 'missing parameters for terrain. Ensure terrain has x, y, terrain, and traversable.' });
     }
-    
-    // var newTerrain = {x: 100, y: 100, terrain: "brig", traversable: "false"};
     
 });
 

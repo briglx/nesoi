@@ -1,18 +1,28 @@
 .content {
     width: 1280px;
 }
-.pallet {
+.pallet, .cmd, .map  {
     position: absolute;
     right: 0px;    
     spadding: 10px;
     background-color: rgba(0,0,0,0.1);
     width: 162px;
 }
-.pallet * + * {
+.map {
+    margin-top:30px;
+    min-height: 100px;
+}
+.cmd input {
+    width:100%;
+}
+.pallet{
+    margin-top:140px;
+}
+.pallet .tab * + * {
     smargin: 10px 0px;
 }
 
-.content div, .pallet div, p {
+.content div, .pallet .icons div, p {
     box-sizing: border-box;
     sborder: 1px solid rgba(102, 102, 102, 0.1);
     height: 64px;
@@ -21,8 +31,30 @@
     text-align:center;
     color: rgba(0,0,0,0);
 }
+.pallet h1 {
+    font-size:12px;
+    margin-left:6px;
+}
+.pallet .tab {
+    border: 1px solid green;
+    width: 162px;
+    overflow:hidden;
+}
 
-.pallet div {
+.pallet .icons {
+    display:none;
+}
+
+.pallet .tab.active .icons{
+    display:block;
+}
+.pallet .tab h1::before {
+    content: "￫";
+}
+.pallet .tab.active h1::before {
+    content: "￬";
+}
+.pallet .icons div {
     box-sizing: initial;
     border: 5px solid rgba(0,0,0,1);
     float:left;
@@ -30,7 +62,7 @@
     margin-left: 5px;
     margin-top: 5px;
 }
-.pallet div.selected {
+.pallet .icons div.selected {
     border: 5px solid rgba(255,0,0,1);
 }
 
@@ -60,7 +92,11 @@ p.top {
 }
 
 
-
+/*mountain green*/
+.mountainGreenTopLeft {
+    background-image: url("img/mountainGreenTopLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
 .mountainGreenTop {
     background-image: url("img/mountainGreenTop.png");
     background-color: rgba(19, 142, 1, 1);
@@ -69,22 +105,273 @@ p.top {
     background-image: url("img/mountainGreenTopRight.png");
     background-color: rgba(19, 142, 1, 1);
 }
-
 .mountainGreen {
     background-image: url("img/mountainGreen.png");
     background-color: rgba(19, 142, 1, 1);
 }
-
+.mountainGreenLowerLeft {
+    background-image: url("img/mountainGreenLowerLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
 .mountainGreenLowerRight {
     background-image: url("img/mountainGreenLowerRight.png");
     background-color: rgba(19, 142, 1, 1);
 }
 
-.mountainGreenLowerLeft {
-    background-image: url("img/mountainGreenLowerLeft.png");
+
+
+/*Red Mountain*/
+.mountainRedTop {
+    background-image: url("img/mountainRedTop.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.mountainRedTopRight {
+    background-image: url("img/mountainRedTopRight.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.mountainRedTopLeft {
+    background-image: url("img/mountainRedTopLeft.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.mountainRed {
+    background-image: url("img/mountainRed.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.mountainRedLowerRight {
+    background-image: url("img/mountainRedLowerRight.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.mountainRedLowerLeft {
+    background-image: url("img/mountainRedLowerLeft.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+
+/*Red Tree*/
+.treeRedLeft {
+    background-image: url("img/treeRedLeft.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.treeRedRight {
+    background-image: url("img/treeRedRight.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.treeRedTopLeft {
+    background-image: url("img/treeRedTopLeft.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.treeRedTop {
+    background-image: url("img/treeRedTop.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.treeRedTopRight {
+    background-image: url("img/treeRedTopRight.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+
+/*Green Tree*/
+.treeGreenLeft {
+    background-image: url("img/treeGreenLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.treeGreenRight {
+    background-image: url("img/treeGreenRight.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.treeGreenTopLeft {
+    background-image: url("img/treeGreenTopLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.treeGreenTop {
+    background-image: url("img/treeGreenTop.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.treeGreenTopRight {
+    background-image: url("img/treeGreenTopRight.png");
     background-color: rgba(19, 142, 1, 1);
 }
 
+
+/*Red Sand*/
+.sandRedTopLeft {
+    background-image: url("img/sandRedTopLeft.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+.sandRedTop {
+    background-image: url("img/sandRedTop.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+
+.sandRedTopRight {
+    background-image: url("img/sandRedTopRight.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+.sandRedLeft {
+    background-image: url("img/sandRedLeft.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+.sand {
+    /*Obsolete use sandRed instead*/
+    background-image: url("img/sand.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+.sandRed {
+    background-image: url("img/sand.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+.sandRedRight {
+    background-image: url("img/sandRedRight.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+.sandRedLowerLeft {
+    background-image: url("img/sandRedLowerLeft.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+.sandRedLower {
+    background-image: url("img/sandRedLower.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+.sandRedLowerRight {
+    background-image: url("img/sandRedLowerRight.png");
+    background-color: rgba(233, 180, 78, 1);
+}
+
+
+/*Red Gate*/
+.gateRedTopLeft {
+    background-image: url("img/gateRedTopLeft.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.gateRedTop {
+    background-image: url("img/gateRedTop.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+
+.gateRedTopRight {
+    background-image: url("img/gateRedTopRight.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.gateRedLeft {
+    background-image: url("img/gateRedLeft.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+.gateRedRight {
+    background-image: url("img/gateRedRight.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+
+/*Water Red*/
+
+.waterRedTopLeft {
+    background-image: url("img/waterRedTopLeft.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedTopRight {
+    background-image: url("img/waterRedTopRight.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedTop {
+    background-image: url("img/waterRedTop.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedLeft {
+    background-image: url("img/waterRedLeft.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.water {
+    /*Obsolete use waterRed*/
+    background-image: url("img/water.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRed {
+    background-image: url("img/water.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedRight {
+    background-image: url("img/waterRedRight.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedLowerLeft {
+    background-image: url("img/waterRedLowerLeft.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedLower {
+    background-image: url("img/waterRedLower.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedLowerRight {
+    background-image: url("img/waterRedLowerRight.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+
+.waterRedOutsideLowerRight {
+    background-image: url("img/waterRedOutsideLowerRight.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedOutsideLowerLeft {
+    background-image: url("img/waterRedOutsideLowerLeft.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedOutsideTopLeft {
+    background-image: url("img/waterRedOutsideTopLeft.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterRedOutsideTopRight {
+    background-image: url("img/waterRedOutsideTopRight.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+
+
+/*extras*/
+.waterfall {
+    background-image: url("img/waterfall.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+
+
+.bridge {
+    background-image: url("img/bridge.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+
+.stairsRed {
+    background-image: url("img/stairsRed.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+
+.ladderRed {
+    background-image: url("img/ladderRed.png");
+    background-color: rgba(0, 0, 255, 1);
+}
+
+.guardRed {
+    background-image: url("img/guardRed.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+
+.quicksand {
+    background-color: rgba(183, 135, 20, 1);
+}
+
+
+.bushGreen {
+    background-image: url("img/bushGreen.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+
+.bushRed {
+    background-image: url("img/bushRed.png");
+    background-color: rgba(176, 37, 3, 1);
+}
+
+.rockGreen {
+    background-image: url("img/rockGreen.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+
+.rockRed {
+    background-image: url("img/rockRed.png");
+    background-color: rgba(176, 37, 3, 1);
+}
 
 .cave {
     background-image: url("img/cave.png");
@@ -99,19 +386,4 @@ p.top {
 .grass {
     background-image: url("img/grass.png");
     background-color: rgba(17, 172, 0, 1);
-}
-
-.sand {
-    background-image: url("img/sand.png");
-    background-color: rgba(233, 180, 78, 1);
-}
-
-.water {
-    background-image: url("img/water.png");
-    background-color: rgba(112, 112, 201, 1);
-
-}
-
-.quicksand {
-    background-color: rgba(183, 135, 20, 1);
 }

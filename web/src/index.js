@@ -13,7 +13,7 @@
     };
 
     var worldBounds = {
-        min: {x: 0, y:0},
+        min: {x: 0, y:-16},
         max: {x: 40, y:20}
     };
     var defaultBounds = {
@@ -49,14 +49,36 @@
 
         this.moveUp = function(){
 
-            if(this.facing != Direction.top){
-                this.facing = Direction.top;
+            this.move(Direction.top, 0, -1)
+
+        };
+        this.moveDown = function(){
+
+            this.move(Direction.bottom, 0, 1)
+
+        };
+        this.moveLeft = function(){
+
+            this.move(Direction.left, -1, 0)
+
+        };
+        this.moveRight = function(){
+
+            this.move(Direction.right, 1, 0)
+
+        };
+
+
+        this.move = function(direction, delX, delY){
+
+            if(this.facing != direction){
+                this.facing = direction;
             } else {
 
-                var target = {x: this.x, y:this.y-1};
+                var target = {x: this.x + delX, y:this.y + delY};
                 var targetCell = getCell(target);
 
-                if(inBoundary(target) && inWorld(target)){                    
+                if(inBoundary(target)){                    
 
                     if(targetCell && targetCell.traversable){
                         if(targetCell.terrain == "quicksand"){
@@ -65,115 +87,39 @@
                         }
                         else
                         {
+                            this.x = target.x;       
                             this.y = target.y;       
                         }                        
                     }                
                 } 
                 else {
-                    if(inWorld(target) && targetCell && targetCell.traversable){
+
+                    if(targetCell == undefined || targetCell.traversable){
+
                         bounds = getBounds(target);
-                        this.y = bounds.max.y;  
-
-                        world.trigger("changeBounds", bounds);          
-                    }
-                }
-            }
-        };
-        this.moveDown = function(){
-
-            if(this.facing != Direction.bottom){
-                this.facing = Direction.bottom;
-            } else {
-
-                var target = {x: this.x, y:this.y+1};
-                var targetCell = getCell(target);
-
-                if(inBoundary(target) && inWorld(target)){                
-                    
-                    if(targetCell.traversable){
-                        if(targetCell.terrain == "quicksand"){
-                            alert("You Died");
-                            resetGame(this);
+                        if(delX > 0){
+                            this.x = bounds.min.x;
                         }
-                        else
-                        {
-                            this.y = target.y;
+                        if(delX < 0){
+                            this.x = bounds.max.x;
                         }
-                    }
-                }  
-                else {
-                    if(inWorld(target) && targetCell && targetCell.traversable){
-                        bounds = getBounds(target);
-                        this.y = bounds.min.y; 
-                        world.trigger("changeBounds", bounds);    
-                    }
-                }
-            }
-        };
-        this.moveLeft = function(){
-
-            if(this.facing != Direction.left){
-                this.facing = Direction.left;
-            } else {
-
-                var target = {x: this.x-1, y:this.y};
-                var targetCell = getCell(target);
-
-                if(inBoundary(target) && inWorld(target)){                
-                    
-                    if(targetCell.traversable){
-                        if(targetCell.terrain == "quicksand"){
-                            alert("You Died");
-                            resetGame(this);
+                        if(delY > 0){
+                            this.y = bounds.min.y;
                         }
-                        else
-                        {
-                            this.x = target.x;
+                        if(delY < 0){
+                            this.y = bounds.max.y;
                         }
-                    }
-                } else {
 
-                    if(inWorld(target) && targetCell && targetCell.traversable){
-                        bounds = getBounds(target);
-                        this.x = bounds.max.x;
-                        world.trigger("changeBounds", bounds);     
-                    }   
-                } 
-            }
-        };
-        this.moveRight = function(){
-            console.log("debug");
-
-            if(this.facing != Direction.right){
-                this.facing = Direction.right;
-            } else {
-
-                var target = {x: this.x+1, y:this.y};
-                var targetCell = getCell(target);
-
-                if(inBoundary(target) && inWorld(target)){                
-                    
-                    if(targetCell.traversable){
-                        if(targetCell.terrain == "quicksand"){
-                            alert("You Died");
-                            resetGame(this);
-                        }
-                        else
-                        {
-                            this.x = target.x;
-                        }
-                    }
-                } else {
-                    // Load new boundary
-                    if(inWorld(target) && targetCell && targetCell.traversable){
-                        bounds = getBounds(target);
-                        this.x = bounds.min.x;
                         world.trigger("changeBounds", bounds); 
                     }
-                } 
+                                     
+                }
             }
-        };
+        }
     }
+
+
+
     
     var jim = new Person();
     _.extend(jim, Backbone.Events);
@@ -197,6 +143,8 @@
     var world = new World();
     _.extend(world, Backbone.Events);
     world.on("changeBounds", function(bounds){
+
+        console.log("bounds")
         
         drawMap(bounds);
         updateMap(cells, bounds);    
@@ -257,9 +205,20 @@
         
     });
 
+    $(".pallet .tab h1").on("click", function(e){
+
+        var tab = $(this).parent(".tab");
+        $(".icons", tab).slideToggle("slow");
+        $(tab).toggleClass("active");
+
+        // console.log('hi");');
+        // console.log($(this).parent(".tab").find(".icons").isHidden());
+        // $(this).parent(".tab").find(".icons").hide();
+    });
+
     var selectedTerrain;
-    $(".pallet div").on("click", function(e){
-        $(".pallet div").removeClass("selected");
+    $(".pallet .icons div").on("click", function(e){
+        $(".pallet .icons div").removeClass("selected");
 
         if(selectedTerrain != $(this).attr("class").replace("selected", "").trim()){
             
@@ -280,13 +239,18 @@
             $(this).removeClass($(this).attr("class"));
             $(this).addClass(selectedTerrain);
 
+            console.log("debug")
+
             var updatePoint = indexToCoord($(this).index()+1, bounds);
             var updateCell = getCell(updatePoint);
 
-            if(updateCell){
-                updateCell.terrain = selectedTerrain;
-                updateCell.traversable = $('.chk').prop('checked')==true;
+            if(!updateCell){                
+                // Must be part of a new world
+                updateCell = {x:updatePoint.x,y:updatePoint.y};
             }
+            updateCell.terrain = selectedTerrain;
+            updateCell.traversable = $('.chk').prop('checked')==true;
+
             // Save to DB
             $.post("http://localhost:8080/api/terrain/", updateCell)    
             
@@ -453,30 +417,24 @@
     function isTerrainTraversable(terrain){
 
         var isTraversable = false;
-
-        if(terrain == "mountainGreenTop"){
-
-        } else if(terrain == "mountainGreenTopRight"){
-
-        } else if(terrain == "mountainGreen"){
-
-        } else if(terrain == "mountainGreenLowerRight"){
-
-        } else if(terrain == "mountainGreenLowerLeft"){
-
-        } else if(terrain == "cave"){
+console.log(terrain);
+        if(terrain == "cave"){
             isTraversable = true;
         } else if(terrain == "dirt"){
             isTraversable = true;
         } else if(terrain == "grass"){
             isTraversable = true;
-        } else if(terrain == "sand"){
+        } else if(terrain.indexOf("sand") >= 0){
             isTraversable = true;
-        } else if(terrain == "water"){
-
-        } else if(terrain == "quicksand"){
+        } else if(terrain.indexOf("Outside") >= 0){
             isTraversable = true;
-        }
+        } else if(terrain == "bridge"){
+            isTraversable = true;
+        } else if(terrain.indexOf("stairs") >= 0){
+            isTraversable = true;
+        } else if(terrain.indexOf("ladder") >= 0){
+            isTraversable = true;
+        }    
 
         return isTraversable;
     }
@@ -537,8 +495,12 @@
         var point = {x:0, y:0};
         
         var y = bounds.min.y + Math.floor((idx -1) / bounds.getWidth());
+
+        var length = bounds.min.y
+
+        var distanceFromMinY = y - bounds.min.y;
         
-        point.x = bounds.min.x + (idx - 1) - bounds.getWidth() * y;
+        point.x = bounds.min.x + (idx - 1) - bounds.getWidth() * distanceFromMinY;
         point.y = y;
 
         return point

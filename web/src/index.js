@@ -25,7 +25,7 @@
         getHeight: function(){return this.max.y - this.min.y + 1}
     };
     var miniMapBounds = {
-        scale: 2,
+        scale: 4,
         min: {x: 0, y:0},
         max: {x: 0, y:0},
         getWidth: function(){return this.max.x - this.min.x + 1},
@@ -140,6 +140,7 @@
 
     var jim = new Person();
     var world = new World();
+
     function ready(){
 
         createPlayer();
@@ -395,8 +396,7 @@
             var svgStr = '<svg>'
             var color = "black";
             for(var i=0;i<cs.length;i++){
-                c = cs[i];
-               
+                c = cs[i];               
                 svgStr = svgStr + '<rect x="' + (c.x - miniMapBounds.min.x) * miniMapBounds.scale + '" y="' + (c.y - miniMapBounds.min.y)*miniMapBounds.scale + '" width="' + miniMapBounds.scale  + '" height="' + miniMapBounds.scale + '" fill="' + getDefaultColor(c.terrain) + '" />"' 
             }
             svgStr = svgStr + '</svg>'
@@ -412,15 +412,20 @@
     }
 
     function getDefaultColor(terrain){
+        // Used for minimap
+
         var defaultColor = "black";
 
         if(terrain.toLowerCase().indexOf("water") >= 0){
             defaultColor = "#0000FF";
-        }
-        else if(terrain.toLowerCase().indexOf("green") >= 0){
+        } else if(terrain.toLowerCase().indexOf("green") >= 0){
             defaultColor = "#138E01";
         } else if(terrain.toLowerCase().indexOf("red") >= 0){
             defaultColor = "#B02503";
+        } else if(terrain.toLowerCase().indexOf("grey") >= 0){
+            defaultColor = "#666666";
+        } else if(terrain.toLowerCase().indexOf("white") >= 0){
+            defaultColor = "#ffffff";
         } else if(terrain.toLowerCase().indexOf("sand") >= 0){
             defaultColor = "#FEB367";
         } else if(terrain.toLowerCase().indexOf("water") >= 0){
@@ -439,7 +444,7 @@
         var cols = (bounds.max.x - bounds.min.x +1);
         var rows = (bounds.max.y - bounds.min.y +1)
         var width = cols * (cellBounds.max.x +1);
-        var defaultCell = {terrain: "water", x:1, y:1}
+        var defaultCell = {terrain: "unknown", x:1, y:1}
 
         $(".content").width(width);        
         $(".content div").remove();      
@@ -519,7 +524,7 @@
 
         if(terrain == "cave"){
             isTraversable = true;
-        } else if(terrain == "dirt"){
+        } else if(terrain.indexOf("dirt") >= 0){
             isTraversable = true;
         } else if(terrain == "grass"){
             isTraversable = true;
@@ -527,7 +532,7 @@
             isTraversable = true;
         } else if(terrain.indexOf("Outside") >= 0){
             isTraversable = true;
-        } else if(terrain == "bridge"){
+        } else if(terrain.indexOf("bridge") >= 0){
             isTraversable = true;
         } else if(terrain.indexOf("stairs") >= 0){
             isTraversable = true;

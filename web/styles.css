@@ -97,6 +97,10 @@ p.top {
 }
 
 
+.unknown {
+    background-image: url("img/unknown.png");
+    background-color: rgba(0, 0, 0, .1);
+}
 /*mountain green*/
 .mountainGreenTopLeft {
     background-image: url("img/mountainGreenTopLeft.png");
@@ -149,6 +153,32 @@ p.top {
 .mountainRedLowerLeft {
     background-image: url("img/mountainRedLowerLeft.png");
     background-color: rgba(176, 37, 3, 1);
+}
+
+/*White Mountain*/
+.mountainWhiteTop {
+    background-image: url("img/mountainWhiteTop.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.mountainWhiteTopRight {
+    background-image: url("img/mountainWhiteTopRight.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.mountainWhiteTopLeft {
+    background-image: url("img/mountainWhiteTopLeft.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.mountainWhite {
+    background-image: url("img/mountainWhite.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.mountainWhiteLowerRight {
+    background-image: url("img/mountainWhiteLowerRight.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.mountainWhiteLowerLeft {
+    background-image: url("img/mountainWhiteLowerLeft.png");
+    background-color: rgba(255, 255, 255, 1);
 }
 
 /*Red Tree*/
@@ -250,7 +280,10 @@ p.top {
     background-image: url("img/gateRedTop.png");
     background-color: rgba(176, 37, 3, 1);
 }
-
+.gateRedCyclopsTop {
+    background-image: url("img/gateRedCyclopsTop.png");
+    background-color: rgba(176, 37, 3, 1);
+}
 .gateRedTopRight {
     background-image: url("img/gateRedTopRight.png");
     background-color: rgba(176, 37, 3, 1);
@@ -262,6 +295,58 @@ p.top {
 .gateRedRight {
     background-image: url("img/gateRedRight.png");
     background-color: rgba(176, 37, 3, 1);
+}
+
+/*Green Gate*/
+.gateGreenTopLeft {
+    background-image: url("img/gateGreenTopLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.gateGreenTop {
+    background-image: url("img/gateGreenTop.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.gateGreenCyclopsTop {
+    background-image: url("img/gateGreenCyclopsTop.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.gateGreenTopRight {
+    background-image: url("img/gateGreenTopRight.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.gateGreenLeft {
+    background-image: url("img/gateGreenLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.gateGreenRight {
+    background-image: url("img/gateGreenRight.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+
+/*White Gate*/
+.gateWhiteTopLeft {
+    background-image: url("img/gateWhiteTopLeft.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.gateWhiteCyclopsTop {
+    background-image: url("img/gateWhiteCyclopsTop.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.gateWhiteTop {
+    background-image: url("img/gateWhiteTop.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.gateWhiteTopRight {
+    background-image: url("img/gateWhiteTopRight.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.gateWhiteLeft {
+    background-image: url("img/gateWhiteLeft.png");
+    background-color: rgba(255, 255, 255, 1);
+}
+.gateWhiteRight {
+    background-image: url("img/gateWhiteRight.png");
+    background-color: rgba(255, 255, 255, 1);
 }
 
 /*Water Red*/
@@ -325,6 +410,62 @@ p.top {
     background-color: rgba(112, 112, 201, 1);
 }
 
+/*Water Green*/
+
+.waterGreenTopLeft {
+    background-image: url("img/waterGreenTopLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.waterGreenTopRight {
+    background-image: url("img/waterGreenTopRight.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.waterGreenTop {
+    background-image: url("img/waterGreenTop.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.waterGreenLeft {
+    background-image: url("img/waterGreenLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.waterGreen {
+    background-image: url("img/waterGreen.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.waterGreenRight {
+    background-image: url("img/waterGreenRight.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.waterGreenLowerLeft {
+    background-image: url("img/waterGreenLowerLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.waterGreenLower {
+    background-image: url("img/waterGreenLower.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.waterGreenLowerRight {
+    background-image: url("img/waterGreenLowerRight.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+
+.waterGreenOutsideLowerRight {
+    background-image: url("img/waterGreenOutsideLowerRight.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterGreenOutsideLowerLeft {
+    background-image: url("img/waterGreenOutsideLowerLeft.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterGreenOutsideTopLeft {
+    background-image: url("img/waterGreenOutsideTopLeft.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+.waterGreenOutsideTopRight {
+    background-image: url("img/waterGreenOutsideTopRight.png");
+    background-color: rgba(112, 112, 201, 1);
+}
+
 
 /*extras*/
 .waterfall {
@@ -337,6 +478,10 @@ p.top {
     background-image: url("img/bridge.png");
     background-color: rgba(176, 37, 3, 1);
 }
+.bridgeGreen {
+    background-image: url("img/bridgeGreen.png");
+    background-color: rgba(19, 142, 1, 1);
+}
 
 .stairsRed {
     background-image: url("img/stairsRed.png");
@@ -347,16 +492,34 @@ p.top {
     background-image: url("img/ladderRed.png");
     background-color: rgba(0, 0, 255, 1);
 }
-
+.ladderGreen {
+    background-image: url("img/ladderGreen.png");
+    background-color: rgba(0, 0, 255, 1);
+}
+.ladderWhite {
+    background-image: url("img/ladderWhite.png");
+    background-color: rgba(255, 255, 255, 1);
+}
 .guardRed {
     background-image: url("img/guardRed.png");
     background-color: rgba(176, 37, 3, 1);
+}
+.guardGreen {
+    background-image: url("img/guardGreen.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.guardWhite {
+    background-image: url("img/guardWhite.png");
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .quicksand {
     background-color: rgba(183, 135, 20, 1);
 }
-
+.headstone {
+    background-image: url("img/headstone.png");
+    background-color: rgba(255, 255, 255, 1);
+}
 
 .bushGreen {
     background-image: url("img/bushGreen.png");
@@ -366,6 +529,10 @@ p.top {
 .bushRed {
     background-image: url("img/bushRed.png");
     background-color: rgba(176, 37, 3, 1);
+}
+.bushWhite {
+    background-image: url("img/bushWhite.png");
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .rockGreen {
@@ -386,6 +553,10 @@ p.top {
 .dirt {
     background-image: url("img/dirt.png");
     background-color: rgba(254, 179, 103, 1);
+}
+.dirtGrey {
+    background-image: url("img/dirtGrey.png");
+    background-color: rgba(103, 103, 103, 1);
 }
 
 .grass {

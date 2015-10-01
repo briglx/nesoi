@@ -13,13 +13,13 @@ for(var i=0;i<dbs.length;i++){
 }
 
 print("\nDrop Collections...");
-db.terrain.drop();
-db.terrain_test.drop();
+db.terrain_eden.drop();
+
 
 
 print("\nCreate Terrain...");
 db.runCommand( { 
-    create: "terrain"
+    create: "terrain_eden"
 });
 
 
@@ -37,7 +37,7 @@ function addCells(){
     var cell;
     for(var i=0; i<cells.length; i++){
         cell = cells[i];
-        db.terrain.insert(cell);
+        db.terrain_eden.insert(cell);
     }
 }
 

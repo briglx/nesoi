@@ -81,19 +81,30 @@ p {
     margin:0;
     padding:0;
     border: none;
-    background-color: rgba(0,255,0,0.33);
+    background-repeat: no-repeat;
+    ssbackground-attachment: fixed;
+    background-position: center; 
+    
 }
 p.left {
-    border-left: 5px solid rgba(0,255,0,0.75);
+    background-image: url("img/linkGreenLeft.png");
 }
 p.bottom {
-    border-bottom: 5px solid rgba(0,255,0,0.75);
+    background-image: url("img/linkGreenForward.png");
+    /*border-bottom: 5px solid rgba(0,255,0,0.75);*/
+    background-color: none;
 }
+p.bottom.two {
+    background-image: url("img/linkGreenForward2.png");
+    /*border-bottom: 5px solid rgba(0,255,0,0.75);*/
+    background-color: none;
+}
+
 p.right {
-    border-right: 5px solid rgba(0,255,0,0.75);
+    background-image: url("img/linkGreenRight.png");
 }
 p.top {
-    border-top: 5px solid rgba(0,255,0,0.75);
+    background-image: url("img/linkGreenBack.png");
 }
 
 
@@ -179,6 +190,32 @@ p.top {
 .mountainWhiteLowerLeft {
     background-image: url("img/mountainWhiteLowerLeft.png");
     background-color: rgba(255, 255, 255, 1);
+}
+
+/*mountain Black*/
+.mountainBlackTopLeft {
+    background-image: url("img/mountainBlackTopLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.mountainBlackTop {
+    background-image: url("img/mountainBlackTop.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.mountainBlackTopRight {
+    background-image: url("img/mountainBlackTopRight.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.mountainBlack {
+    background-image: url("img/mountainBlack.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.mountainBlackLowerLeft {
+    background-image: url("img/mountainBlackLowerLeft.png");
+    background-color: rgba(19, 142, 1, 1);
+}
+.mountainBlackLowerRight {
+    background-image: url("img/mountainBlackLowerRight.png");
+    background-color: rgba(19, 142, 1, 1);
 }
 
 /*Red Tree*/
@@ -563,3 +600,9 @@ p.top {
     background-image: url("img/grass.png");
     background-color: rgba(17, 172, 0, 1);
 }
+
+.linkGreenForward {
+    background-image: url("img/linkGreenForward.png");
+    
+}
+

@@ -24,7 +24,7 @@ var router = express.Router();
 router.get('/terrain/:terrainType?', function(req, res) {
     res.setHeader('Last-Modified', (new Date()).toUTCString());
 
-    var collection = db.get().collection('terrain')
+    var collection = db.get().collection('terrain_eden')
     
     var query = {};
 
@@ -75,7 +75,7 @@ router.get('/terrain/:terrainType?', function(req, res) {
 
 router.post('/terrain/', function(req, res) {
     
-    var collection = db.get().collection('terrain')
+    var collection = db.get().collection('terrain_eden')
 
     var terrain = req.body;
 

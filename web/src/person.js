@@ -5,7 +5,7 @@
     var startingPoint = {
         x: 7,
         y: 5,
-        partialX: 2,
+        partialX: 0,
         partialY: 0
     }
 

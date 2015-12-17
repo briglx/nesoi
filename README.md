@@ -2,6 +2,10 @@
 
 This project started as an example on game design. There is a world made up of several pages and each page has tiles. The player can move from tile to tile.
 
+## Pre-requisits
+* Apache is installed and configured 
+
+
 ## Installing
 
 * Clone and navigate to the project 

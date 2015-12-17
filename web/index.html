@@ -11,24 +11,29 @@
         
     </div>
     <div class="miniPallet">
+        <input type="hidden" class="selectedIdx">
+        <div class="items">
+            <div class="item">
+                <div class="icon mountainRed"></div>
+                <div class="badge">50.8%</div>    
+            </div>
+            <div class="item">
+                <div class="icon bushGreen"></div>
+                <div class="badge">14.1%</div>    
+            </div>
+            <div class="item">
+                <div class="icon mountainGreen"></div>
+                <div class="badge">11.0%</div>    
+            </div>
+            <div class="item">
+                <div class="icon bushRed"></div>
+                <div class="badge">7.8%</div>    
+            </div>
+        </div>
         
-        <div class="item">
-            <div class="icon mountainRed"></div>
-            <div class="badge">50.8%</div>    
-        </div>
+        
         <div class="notch"></div>
-        <div class="item">
-            <div class="icon bushGreen"></div>
-            <div class="badge">14.1%</div>    
-        </div>
-        <div class="item">
-            <div class="icon mountainGreen"></div>
-            <div class="badge">11.0%</div>    
-        </div>
-        <div class="item">
-            <div class="icon bushRed"></div>
-            <div class="badge">7.8%</div>    
-        </div>
+        
 
     </div>
 
@@ -269,7 +274,16 @@
      
     </style>
 
+
+
     <link rel="stylesheet" href="cellDistribution.css">
+
+    <script id="item-template" type="text/x-handlebars-template">
+      <div class="item">
+        <div class="icon {{terrain}}"></div>
+        <div class="badge">{{marginal}}%</div>    
+      </div>
+    </script>
     
     <script src="dist/bundle.js"></script>
 </body>

@@ -4,7 +4,7 @@
 
     var $ = require('jquery');
     var Backbone = require('backbone');
-    var _ = require('underscore');
+    var _ = require('lodash');
     Backbone.$ = $;
 
     var cellBounds = {

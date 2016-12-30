@@ -40,3 +40,10 @@ $ sudo npm install gulp -g
 $ cd /path/to/nesoi
 $ gulp
 ```
+* Configure Analtyics
+    * Install anaconda
+    * Install pymongo
+    ```bash
+    $ pip install -upgrade pip
+    $ python -m pip install pymongo
+    ````

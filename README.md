@@ -31,6 +31,21 @@ $ cd /path/to/nesoi/src
 $ npm install
 $ node index.js
 ```
+* Test Backend
+   * Open Advance Rest Client
+   * Navigate to http://127.0.0.1:8080/api/terrain?p=0,0
+   ```json
+   {"terrain":      
+       [{"_id":"59aeba34ac63c0a528baac6c","x":0,"y":0,"terrain":"mountainGreen","traversable":false,"mY":0,"mX":0,"idx":0}, 
+       {"_id":"59aeba34ac63c0a528baac6d","x":1,"y":0,"terrain":"mountainGreen","traversable":false,"mY":0,"mX":1,"idx":1},
+       {"_id":"59aeba34ac63c0a528baac6e","x":2,"y":0,"terrain":"mountainGreen","traversable":false,"mY":0,"mX":2,"idx":2},
+       {"_id":"59aeba34ac63c0a528baac6f","x":3,"y":0,"terrain":"mountainGreen","traversable":false,"mY":0,"mX":3,"idx":3},
+       {"_id":"59aeba34ac63c0a528baac70","x":4,"y":0,"terrain":"mountainGreen","traversable":false,"mY":0,"mX":4,"idx":4},
+       {"_id":"59aeba34ac63c0a528baac71","x":5,"y":0,"terrain":"mountainGreen","traversable":false,"mY":0,"mX":5,"idx":5},
+       {"..."}
+       ]
+   ```
+
 * Install gulp globally
 ```bash
 $ sudo npm install gulp -g
